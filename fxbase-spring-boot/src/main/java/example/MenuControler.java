@@ -2,6 +2,8 @@ package example;
 
 import java.io.FileNotFoundException;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fxbase.AbstractControler;
@@ -15,7 +17,13 @@ import javafx.scene.control.MenuItem;
 public class MenuControler extends AbstractControler {
 
 	@Autowired
-	Starter app;
+	Starter starter;
+	
+	
+	@PostConstruct
+	private void init() {
+		System.out.println("MenuControler: " + starter.hashCode());
+	}
 	
 	
 	@FXML

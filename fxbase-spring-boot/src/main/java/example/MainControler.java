@@ -17,6 +17,10 @@ public class MainControler extends AbstractControler {
 
 	@Autowired
 	private MenuControler menu;
+	
+	@Autowired
+	private Starter starter;
+
 
 	@FXML
 	private Button mButton;
@@ -31,7 +35,7 @@ public class MainControler extends AbstractControler {
 	
 	@PostConstruct
 	private void init() {
-		System.out.println("aa");
+		System.out.println("MainControler: " + starter.hashCode());
 		BorderPane borderPane = (BorderPane)getView();
 		borderPane.setTop(menu.getView());
 	}
