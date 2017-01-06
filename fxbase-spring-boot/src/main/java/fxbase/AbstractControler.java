@@ -57,7 +57,6 @@ public abstract class AbstractControler  implements ApplicationContextAware  {
 		this.bundle = getResourceBundle(getBundleName());
 	}
 	
-	 
 	
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		if (this.applicationContext != null) {

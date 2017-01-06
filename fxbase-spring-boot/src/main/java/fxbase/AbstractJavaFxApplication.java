@@ -1,5 +1,7 @@
 package fxbase;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -8,16 +10,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-public abstract class AbstractJavaFxApplication extends Application {
+public abstract class AbstractJavaFxApplication extends Application implements IFxmlLoader {
 	
 	private static String[] savedArgs;
 
 	private static Class<? extends AbstractControler> savedInitialView;
 
-	private ConfigurableApplicationContext applicationContext;
+	private static ConfigurableApplicationContext applicationContext;
 
-	private Stage stage;
-	private Scene scene; 
+	private static Stage stage;
+	private static Scene scene; 
 
 	@Override
 	public void init() throws Exception {
@@ -28,25 +30,41 @@ public abstract class AbstractJavaFxApplication extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		this.stage = stage;
+		AbstractJavaFxApplication.stage = stage;
 		showView(savedInitialView);
-	}
-
-	public void showView(Class<? extends AbstractControler> newView) {
-		AbstractControler view = applicationContext.getBean(newView);
-		stage.titleProperty().bind(view.titleProperty());
-		if (scene == null) {
-			scene = new Scene(view.getView());
-		}
-		else {  
-			scene.setRoot(view.getView());
-		}
 		
-		// stage.setTitle(windowTitle);
 		stage.setScene(scene);
 		stage.setResizable(true);
 		stage.centerOnScreen();
 		stage.show();
+	}
+	
+	@Override	
+	public <T> T loadView(Class<? extends AbstractControler> newView) {
+		return loadView(newView, true);
+	}
+	 
+	
+	@Override	
+	@SuppressWarnings("unchecked")
+	public <T> T loadView(Class<? extends AbstractControler> newView, boolean reload) {
+		AbstractControler view = applicationContext.getBean(newView);
+		return (T)view;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T showView(Class<? extends AbstractControler> newView) {
+		AbstractControler view = applicationContext.getBean(newView);
+		stage.titleProperty().bind(view.titleProperty());
+		if (AbstractJavaFxApplication.scene == null) {
+			AbstractJavaFxApplication.scene = new Scene(view.getView());
+		}
+		else {  
+			AbstractJavaFxApplication.scene.setRoot(view.getView());
+		}
+		
+		return (T)view;
 	}
 
 	@Override

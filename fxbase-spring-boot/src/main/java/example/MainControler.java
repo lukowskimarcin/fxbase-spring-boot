@@ -21,26 +21,25 @@ public class MainControler extends AbstractControler {
 	@Autowired
 	private Starter starter;
 
-
 	@FXML
 	private Button mButton;
 
 	@FXML
 	void show(ActionEvent event) {
-		 
-		
-		BorderPane borderPane = (BorderPane)getView();
-		borderPane.setTop(menu.getView());
+		starter.showView(TestControler.class);
 	}
 	
 	@PostConstruct
-	private void init() {
-		System.out.println("MainControler: " + starter.hashCode());
+	public void init() {
+		System.out.println("@PostConstruct MainControler ");
 		BorderPane borderPane = (BorderPane)getView();
 		borderPane.setTop(menu.getView());
 	}
 	
 
+	public BorderPane getPane() {
+		return  (BorderPane)getView();
+	}
 	
 	 
 }
