@@ -1,6 +1,7 @@
 package fxbase;
 
-import java.io.IOException;
+import static java.util.ResourceBundle.getBundle;
+
 import java.net.URL;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -13,7 +14,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import static java.util.ResourceBundle.getBundle;
 
 public abstract class AbstractView implements ApplicationContextAware {
 	private static final String FXML_PATH = "/fxml/";
