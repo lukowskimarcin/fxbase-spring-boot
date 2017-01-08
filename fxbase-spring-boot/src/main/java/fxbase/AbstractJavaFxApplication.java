@@ -1,7 +1,5 @@
 package fxbase;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -14,7 +12,7 @@ public abstract class AbstractJavaFxApplication extends Application implements I
 	
 	private static String[] savedArgs;
 
-	private static Class<? extends AbstractControler> savedInitialView;
+	private static Class<? extends AbstractView> savedInitialView;
 
 	private static ConfigurableApplicationContext applicationContext;
 
@@ -40,22 +38,22 @@ public abstract class AbstractJavaFxApplication extends Application implements I
 	}
 	
 	@Override	
-	public <T> T loadView(Class<? extends AbstractControler> newView) {
+	public <T> T loadView(Class<? extends AbstractView> newView) {
 		return loadView(newView, true);
 	}
 	 
 	
 	@Override	
 	@SuppressWarnings("unchecked")
-	public <T> T loadView(Class<? extends AbstractControler> newView, boolean reload) {
-		AbstractControler view = applicationContext.getBean(newView);
+	public <T> T loadView(Class<? extends AbstractView> newView, boolean reload) {
+		AbstractView view = applicationContext.getBean(newView);
 		return (T)view;
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T showView(Class<? extends AbstractControler> newView) {
-		AbstractControler view = applicationContext.getBean(newView);
+	public <T> T showView(Class<? extends AbstractView> newView) {
+		AbstractView view = applicationContext.getBean(newView);
 		stage.titleProperty().bind(view.titleProperty());
 		if (AbstractJavaFxApplication.scene == null) {
 			AbstractJavaFxApplication.scene = new Scene(view.getView());
@@ -73,7 +71,7 @@ public abstract class AbstractJavaFxApplication extends Application implements I
 		applicationContext.close();
 	}
 
-	protected static void launchApp(Class<? extends AbstractJavaFxApplication> appClass, Class<? extends AbstractControler> view, String[] args) {
+	protected static void launchApp(Class<? extends AbstractJavaFxApplication> appClass, Class<? extends AbstractView> view, String[] args) {
 		savedInitialView = view;
 		savedArgs = args;
 		Application.launch(appClass, args);

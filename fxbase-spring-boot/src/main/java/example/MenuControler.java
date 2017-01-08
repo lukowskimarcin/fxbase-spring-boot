@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fxbase.AbstractControler;
+import fxbase.AbstractView;
 import fxbase.FXMLView;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -13,7 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 
 @FXMLView("/fxml/Menu.fxml")
-public class MenuControler extends AbstractControler {
+public class MenuControler extends AbstractView {
 
 	@Autowired
 	private Starter starter;
@@ -41,10 +42,10 @@ public class MenuControler extends AbstractControler {
 
 	@FXML
 	void onAbout(ActionEvent event) throws FileNotFoundException {
-		TestControler controler =  starter.loadView(TestControler.class);
-		main.getPane().setCenter(controler.getView());
+//		TestControler controler =  starter.loadView(TestControler.class);
+//		main.getPane().setCenter(controler.getView());
 
-		System.out.println("onAbout: " + controler.getText());
+		//System.out.println("onAbout: " + controler.getText());
 	}
 
 	@FXML

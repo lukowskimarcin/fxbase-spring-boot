@@ -6,10 +6,14 @@ import java.net.URL;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -19,9 +23,10 @@ public abstract class AbstractView implements ApplicationContextAware {
 	private static final String FXML_PATH = "/fxml/";
 	
 	protected Parent parentView;
-	protected AbstractView controler;
+	protected Object controler;
 	
-	protected URL fxmlFile;
+	protected StringProperty title = new SimpleStringProperty();
+	protected URL fxmlFilePath;
 	protected FXMLLoader fxmlLoader;
 	protected ResourceBundle bundle;
 	private ApplicationContext applicationContext;
@@ -32,30 +37,44 @@ public abstract class AbstractView implements ApplicationContextAware {
 	}
 	
 	public AbstractView(String fxmlRoot) {
+		this.fxmlRoot = fxmlRoot;
+		
 		FXMLView annotation = getFXMLAnnotation();
 		if(annotation!= null && !annotation.value().equals("")){
-			fxmlFile = getClass().getResource(annotation.value());
+			fxmlFilePath = getClass().getResource(annotation.value());
+			System.out.println(fxmlFilePath.getPath());
 		} else {
 			String fileName = fxmlRoot + "/" + getConventionalName() + ".fxml";
-			fxmlFile = getClass().getResource(fileName);
+			fxmlFilePath = getClass().getResource(fileName);
 		}
-		this.fxmlRoot = fxmlRoot;
 		this.bundle = getResourceBundle(getBundleName());
-		this.fxmlLoader = loadFXML(fxmlFile, bundle);
+	
+	}
+	
+	@PostConstruct
+	private void load() {
+		this.fxmlLoader = loadFXML(fxmlFilePath, bundle);
 		this.controler = fxmlLoader.getController();
 		this.parentView = fxmlLoader.getRoot();
 		addCSSIfAvailable(parentView);
 	}
 	
+	
 	public void reload(){
-		this.fxmlLoader = loadFXML(fxmlFile, bundle);
+		this.fxmlLoader = loadFXML(fxmlFilePath, bundle);
 		this.controler = fxmlLoader.getController();
+	}
+	
+	private URL getFxmlFile(){
+		URL path = null;
+		
+		return path;
 	}
 	
 	private FXMLLoader loadFXML(URL resource, ResourceBundle bundle) {
 		FXMLLoader loader = null;
 		try {
-			loader = new FXMLLoader(resource, bundle);
+			loader = new FXMLLoader(resource);
 			loader.setControllerFactory(this::createControllerForType);
 			loader.load();
 		} catch (Exception ex) {
@@ -139,8 +158,16 @@ public abstract class AbstractView implements ApplicationContextAware {
 		return children.listIterator().next();
 	}
 	
-	public AbstractView getControler() {
+	public Object getControler() {
 		return controler;
+	}
+	
+	protected void setTitle(String title) {
+	    this.title.setValue(title);
+	}
+	
+	public StringProperty titleProperty() {
+	    return title;
 	}
 	
 }

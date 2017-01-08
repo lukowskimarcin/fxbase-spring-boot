@@ -12,9 +12,10 @@ import fxbase.AbstractJavaFxApplication;
 public class Starter extends AbstractJavaFxApplication {
 	
 	public static void main(String[] args) {
-		launchApp(Starter.class, MainControler.class, args);
+		launchApp(Starter.class, MainView.class, args);
 	}
 	
 	 
 	
 }
+//C:/Users/Marcin/git/fxbase-spring-boot/fxbase-spring-boot/target/classes/fxml/Main.fxml

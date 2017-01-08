@@ -6,13 +6,14 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fxbase.AbstractControler;
+import fxbase.AbstractView;
 import fxbase.FXMLView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 @FXMLView("/fxml/Test.fxml")
-public class TestControler extends AbstractControler {
+public class TestControler extends AbstractView {
 	
 	@Autowired
 	private Starter starter;
@@ -31,8 +32,8 @@ public class TestControler extends AbstractControler {
 
 	@FXML
 	void show(ActionEvent event) {
-		MainControler x = starter.showView(MainControler.class);
-		x.init();
+//		MainControler x = starter.showView(MainControler.class);
+//		x.init();
 	}
 
 	

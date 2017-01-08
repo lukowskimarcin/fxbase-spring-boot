@@ -49,9 +49,14 @@ public abstract class AbstractControler  implements ApplicationContextAware  {
 		FXMLView annotation = getFXMLAnnotation();
 		if (annotation != null && !annotation.value().equals("")) {
 			this.resource = getClass().getResource(annotation.value());
+			
+			System.out.println(resource.getPath());
+			
 		} else {
 			this.resource = getClass().getResource(getFxmlPath());
 		}
+		
+		
 
 		this.presenterProperty = new SimpleObjectProperty<AbstractControler>();
 		this.bundle = getResourceBundle(getBundleName());
