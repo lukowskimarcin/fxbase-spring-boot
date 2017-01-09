@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 
 import fxbase.AbstractControler;
 import fxbase.AbstractView;
@@ -14,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 
 @FXMLView("/fxml/Menu.fxml")
+@Scope("prototype")
 public class MenuControler extends AbstractView {
 
 	@Autowired

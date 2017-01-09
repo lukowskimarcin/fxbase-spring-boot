@@ -51,25 +51,12 @@ public abstract class AbstractView implements ApplicationContextAware {
 	
 	}
 	
-	@PostConstruct
-	private void load() {
-		this.fxmlLoader = loadFXML(fxmlFilePath, bundle);
-		this.controler = fxmlLoader.getController();
-		this.parentView = fxmlLoader.getRoot();
-		addCSSIfAvailable(parentView);
-	}
-	
 	
 	public void reload(){
-		this.fxmlLoader = loadFXML(fxmlFilePath, bundle);
-		this.controler = fxmlLoader.getController();
+		fxmlLoader = null;
+		controler = null;
 	}
 	
-	private URL getFxmlFile(){
-		URL path = null;
-		
-		return path;
-	}
 	
 	private FXMLLoader loadFXML(URL resource, ResourceBundle bundle) {
 		FXMLLoader loader = null;
@@ -147,20 +134,33 @@ public abstract class AbstractView implements ApplicationContextAware {
 	}
 	
 	public Parent getView() {
+		initializeFXMLLoader();
 		return parentView;
 	}
 	
+	public Object getControler() {
+		initializeFXMLLoader();
+		return controler;
+	}
+
+	private void initializeFXMLLoader() {
+		if (fxmlLoader == null) {
+			fxmlLoader = loadFXML(fxmlFilePath, bundle);
+			controler = fxmlLoader.getController();
+			parentView = fxmlLoader.getRoot();
+			addCSSIfAvailable(parentView);
+		}
+	}
+	
 	public Node getViewWithoutRootContainer(){
-		ObservableList<Node> children = parentView.getChildrenUnmodifiable();
+		ObservableList<Node> children = getView().getChildrenUnmodifiable();
 		if (children.isEmpty()) {
 			return null;
 		}
 		return children.listIterator().next();
 	}
 	
-	public Object getControler() {
-		return controler;
-	}
+	
 	
 	protected void setTitle(String title) {
 	    this.title.setValue(title);

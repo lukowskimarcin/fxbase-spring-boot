@@ -14,11 +14,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 
-@Component
-public class MainControler  {
+@FXMLView("/fxml/Main.fxml")
+public class MainControler extends AbstractView  {
 
 	@Autowired
 	private MenuControler menu;
+	
+	@Autowired 	private MenuControler menu2;
 	
 	@Autowired
 	private Starter starter;
@@ -40,10 +42,10 @@ public class MainControler  {
 	@PostConstruct
 	public void init() {
 		System.out.println("@PostConstruct MainControler ");
-//		BorderPane borderPane = (BorderPane)getView();
-//		borderPane.setTop(menu.getView());
-//		s
+		BorderPane borderPane = (BorderPane)getView();
+		borderPane.setTop(menu.getView());
 		
+		borderPane.setBottom(menu2.getView());
 	
 		Test a = new Test();
 		System.out.println("a: " + a);
@@ -56,9 +58,9 @@ public class MainControler  {
 	}
 	
 
-//	public BorderPane getPane() {
-//		return  (BorderPane)getView();
-//	}
-//	
+	public BorderPane getPane() {
+		return  (BorderPane)getView();
+	}
+	
 	 
 }

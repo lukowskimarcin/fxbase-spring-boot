@@ -12,7 +12,7 @@ import fxbase.AbstractJavaFxApplication;
 public class Starter extends AbstractJavaFxApplication {
 	
 	public static void main(String[] args) {
-		launchApp(Starter.class, MainView.class, args);
+		launchApp(Starter.class, MainControler.class, args);
 	}
 	
 	 
