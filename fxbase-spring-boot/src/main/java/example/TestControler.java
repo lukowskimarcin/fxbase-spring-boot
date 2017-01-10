@@ -6,14 +6,13 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
-import fxbase.AbstractControler;
 import fxbase.AbstractView;
 import fxbase.FXMLView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-@FXMLView("/fxml/Test.fxml")
+@FXMLView("/fxml_test/Test.fxml")
 @Scope("prototype")
 public class TestControler extends AbstractView {
 	

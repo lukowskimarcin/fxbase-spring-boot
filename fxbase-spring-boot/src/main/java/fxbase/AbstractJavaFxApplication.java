@@ -23,7 +23,6 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	public void init() throws Exception {
 		Class<? extends AbstractJavaFxApplication> app = getClass();
 		applicationContext = SpringApplication.run(app, savedArgs);
-		System.out.println("init end");
 	}
 
 	@Override
@@ -34,8 +33,13 @@ public abstract class AbstractJavaFxApplication extends Application  {
 		stage.setScene(scene);
 		stage.setResizable(true);
 		stage.centerOnScreen();
+		
+		initialize();
+		
 		stage.show();
 	}
+	
+	protected abstract void initialize();
 	
 	
 	

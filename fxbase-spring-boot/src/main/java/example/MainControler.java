@@ -6,15 +6,15 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import fxbase.AbstractControler;
 import fxbase.AbstractView;
 import fxbase.FXMLView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import service.Test;
 
-@FXMLView("/fxml/Main.fxml")
+@FXMLView("/fxml_test/Main.fxml")
 public class MainControler extends AbstractView  {
 
 	@Autowired

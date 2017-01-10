@@ -14,6 +14,11 @@ public class Starter extends AbstractJavaFxApplication {
 	public static void main(String[] args) {
 		launchApp(Starter.class, MainControler.class, args);
 	}
+
+	@Override
+	protected void initialize() {
+		
+	}
 	
 	 
 	

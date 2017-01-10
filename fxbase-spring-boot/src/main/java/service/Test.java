@@ -1,8 +1,11 @@
-package example;
+package service;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@ComponentScan
 @Component
 //@Scope("prototype")
 public class Test {

@@ -5,6 +5,7 @@ import static java.util.ResourceBundle.getBundle;
 import java.net.URL;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 
@@ -21,6 +22,7 @@ import javafx.scene.Parent;
 
 public abstract class AbstractView implements ApplicationContextAware, IFxmlLoader {
 	private static final String FXML_PATH = "/fxml/";
+	protected static final Logger log = Logger.getLogger(AbstractView.class.getName());   
 	
 	protected Parent parentView;
 	protected Object controler;
@@ -42,7 +44,6 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 		FXMLView annotation = getFXMLAnnotation();
 		if(annotation!= null && !annotation.value().equals("")){
 			fxmlFilePath = getClass().getResource(annotation.value());
-			System.out.println(fxmlFilePath.getPath());
 		} else {
 			String fileName = fxmlRoot + "/" + getConventionalName() + ".fxml";
 			fxmlFilePath = getClass().getResource(fileName);
