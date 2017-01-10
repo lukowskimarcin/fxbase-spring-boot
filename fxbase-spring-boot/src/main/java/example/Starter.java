@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import fxbase.AbstractJavaFxApplication;
 
 @Lazy
-@ComponentScan
+@ComponentScan(basePackages= {"example", "service"})
 @SpringApplicationConfiguration
 public class Starter extends AbstractJavaFxApplication {
 	
