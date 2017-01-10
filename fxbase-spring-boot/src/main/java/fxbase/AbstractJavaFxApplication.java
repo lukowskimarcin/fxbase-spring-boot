@@ -7,6 +7,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+//TODO
+// - ladowanie ikon
 
 public abstract class AbstractJavaFxApplication extends Application  {
 	
