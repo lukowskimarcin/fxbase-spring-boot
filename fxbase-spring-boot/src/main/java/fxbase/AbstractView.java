@@ -19,7 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 
-public abstract class AbstractView implements ApplicationContextAware {
+public abstract class AbstractView implements ApplicationContextAware, IFxmlLoader {
 	private static final String FXML_PATH = "/fxml/";
 	
 	protected Parent parentView;
@@ -61,7 +61,7 @@ public abstract class AbstractView implements ApplicationContextAware {
 	private FXMLLoader loadFXML(URL resource, ResourceBundle bundle) {
 		FXMLLoader loader = null;
 		try {
-			loader = new FXMLLoader(resource);
+			loader = new FXMLLoader(resource, bundle);
 			loader.setControllerFactory(this::createControllerForType);
 			loader.load();
 		} catch (Exception ex) {
@@ -138,6 +138,13 @@ public abstract class AbstractView implements ApplicationContextAware {
 		return parentView;
 	}
 	
+	@Override	
+	@SuppressWarnings("unchecked")
+	public <T> T loadView(Class<? extends AbstractView> newView) {
+		AbstractView view = applicationContext.getBean(newView);
+		return (T)view;
+	}
+	
 	public Object getControler() {
 		initializeFXMLLoader();
 		return controler;
@@ -151,6 +158,8 @@ public abstract class AbstractView implements ApplicationContextAware {
 			addCSSIfAvailable(parentView);
 		}
 	}
+	
+	
 	
 	public Node getViewWithoutRootContainer(){
 		ObservableList<Node> children = getView().getChildrenUnmodifiable();

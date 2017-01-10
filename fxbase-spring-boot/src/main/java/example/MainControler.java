@@ -36,7 +36,7 @@ public class MainControler extends AbstractView  {
 
 	@FXML
 	void show(ActionEvent event) {
-		starter.showView(TestControler.class);
+		starter.showScene(TestControler.class);
 	}
 	
 	@PostConstruct
@@ -44,7 +44,6 @@ public class MainControler extends AbstractView  {
 		System.out.println("@PostConstruct MainControler ");
 		BorderPane borderPane = (BorderPane)getView();
 		borderPane.setTop(menu.getView());
-		
 		borderPane.setBottom(menu2.getView());
 	
 		Test a = new Test();
@@ -54,13 +53,13 @@ public class MainControler extends AbstractView  {
 		
 		System.out.println("x: " + x);
 		System.out.println("y: " + y);
-		
 	}
 	
 
 	public BorderPane getPane() {
 		return  (BorderPane)getView();
 	}
+
 	
 	 
 }

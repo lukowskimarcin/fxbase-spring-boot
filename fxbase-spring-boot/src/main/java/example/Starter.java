@@ -18,4 +18,3 @@ public class Starter extends AbstractJavaFxApplication {
 	 
 	
 }
-//C:/Users/Marcin/git/fxbase-spring-boot/fxbase-spring-boot/target/classes/fxml/Main.fxml

@@ -4,6 +4,7 @@ package example;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 
 import fxbase.AbstractControler;
 import fxbase.AbstractView;
@@ -13,31 +14,36 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 @FXMLView("/fxml/Test.fxml")
+@Scope("prototype")
 public class TestControler extends AbstractView {
 	
 	@Autowired
 	private Starter starter;
 	
+	private static int count = 0;
+	private int x;
 	
-	private String text;
 	
 	public TestControler(){
-		Date date = new Date();
-		text = "" + date.getTime();
+		count++;
+		x= count;
+		
+		System.out.println("Construct TestControler: " + this);
 	}
 	
+	
+	@Override
+	public String toString() {
+		return ""+  x;
+	}
 	
 	@FXML
 	private Button mButton;
 
 	@FXML
 	void show(ActionEvent event) {
-//		MainControler x = starter.showView(MainControler.class);
-//		x.init();
+		starter.showScene(MainControler.class);
 	}
 
 	
-	public String getText() {
-		return text;
-	}
 }

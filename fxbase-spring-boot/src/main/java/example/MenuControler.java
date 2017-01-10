@@ -44,15 +44,20 @@ public class MenuControler extends AbstractView {
 
 	@FXML
 	void onAbout(ActionEvent event) throws FileNotFoundException {
-//		TestControler controler =  starter.loadView(TestControler.class);
-//		main.getPane().setCenter(controler.getView());
+		TestControler controler =  loadView(TestControler.class);
+		main.getPane().setCenter(controler.getView());
 
-		//System.out.println("onAbout: " + controler.getText());
+		TestControler controler2 =  loadView(TestControler.class);
+		main.getPane().setLeft(controler2.getView());
 	}
 
 	@FXML
 	void onCompress(ActionEvent event) {
 		System.out.println("onCompress");
+		main.reload();
+		starter.showScene(MainControler.class);
+		main.init();
+		
 	}
 
 	

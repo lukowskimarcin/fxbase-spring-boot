@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-public abstract class AbstractJavaFxApplication extends Application implements IFxmlLoader {
+public abstract class AbstractJavaFxApplication extends Application  {
 	
 	private static String[] savedArgs;
 
@@ -29,7 +29,7 @@ public abstract class AbstractJavaFxApplication extends Application implements I
 	@Override
 	public void start(Stage stage) throws Exception {
 		AbstractJavaFxApplication.stage = stage;
-		showView(savedInitialView);
+		showScene(savedInitialView);
 		
 		stage.setScene(scene);
 		stage.setResizable(true);
@@ -37,32 +37,18 @@ public abstract class AbstractJavaFxApplication extends Application implements I
 		stage.show();
 	}
 	
-	@Override	
-	public <T> T loadView(Class<? extends AbstractView> newView) {
-		return loadView(newView, true);
-	}
-	 
 	
-	@Override	
-	@SuppressWarnings("unchecked")
-	public <T> T loadView(Class<? extends AbstractView> newView, boolean reload) {
-		AbstractView view = applicationContext.getBean(newView);
-		return (T)view;
-	}
 	
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> T showView(Class<? extends AbstractView> newView) {
+	public void showScene(Class<? extends AbstractView> newView) {
 		AbstractView view = applicationContext.getBean(newView);
 		stage.titleProperty().bind(view.titleProperty());
+		
 		if (AbstractJavaFxApplication.scene == null) {
 			AbstractJavaFxApplication.scene = new Scene(view.getView());
 		}
 		else {  
 			AbstractJavaFxApplication.scene.setRoot(view.getView());
 		}
-		
-		return (T)view;
 	}
 
 	@Override
