@@ -1,14 +1,16 @@
 package fxbase;
 
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import utils.DialogsUtil;
 
-//TODO
-// - ladowanie ikon
 
 public abstract class AbstractJavaFxApplication extends Application  {
 	
@@ -30,19 +32,31 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	@Override
 	public void start(Stage stage) throws Exception {
 		AbstractJavaFxApplication.stage = stage;
+		
 		showScene(savedInitialView);
 		
 		stage.setScene(scene);
 		stage.setResizable(true);
 		stage.centerOnScreen();
 		
-		initialize();
-		
+		List<Image> icons = loadIcons();
+		if(icons!=null && !icons.isEmpty()){
+			stage.getIcons().addAll(loadIcons());	
+			DialogsUtil.defaultIcon(icons.get(0));
+		}
 		stage.show();
 	}
 	
-	protected abstract void initialize();
 	
+	protected abstract List<Image> loadIcons();
+	
+	public Image getDefaultIcon(){
+		Image icon = null;
+		if(stage!=null && stage.getIcons().size()>0) {
+			icon = stage.getIcons().get(0);
+		}
+		return icon;
+	}
 	
 	
 	public void showScene(Class<? extends AbstractView> newView) {

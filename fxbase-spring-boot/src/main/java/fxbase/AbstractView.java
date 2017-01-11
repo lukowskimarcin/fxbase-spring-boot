@@ -170,7 +170,7 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	
 	
 	
-	protected void setTitle(String title) {
+	public void setTitle(String title) {
 	    this.title.setValue(title);
 	}
 	
