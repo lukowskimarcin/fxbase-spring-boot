@@ -5,12 +5,6 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-/*
- * 
- * TODO: Otwieranie w trybie jednego okna
- * TODO: Otwieranie wielu okien, kazde inne
- *
- */
 
 public class AbstractSeparateView extends AbstractView {
 	private Stage stage;

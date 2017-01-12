@@ -23,7 +23,7 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	protected static final Logger log = Logger.getLogger(AbstractView.class.getName());   
 	
 	protected Parent parentView;
-	protected Object controler;
+	//protected Object controler;
 	
 	protected StringProperty title = new SimpleStringProperty();
 	protected URL fxmlFilePath;
@@ -53,7 +53,7 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	
 	public void reload(){
 		fxmlLoader = null;
-		controler = null;
+		//controler = null;
 	}
 	
 	
@@ -61,8 +61,10 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 		FXMLLoader loader = null;
 		try {
 			loader = new FXMLLoader(resource, bundle);
+			//loader.setController(this);
 			loader.setControllerFactory(this::createControllerForType);
 			loader.load();
+			
 		} catch (Exception ex) {
 			throw new IllegalStateException("Cannot load " + resource.getPath(), ex);
 		}
@@ -70,7 +72,8 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	}
 	
 	private Object createControllerForType(Class<?> type) {
-		return applicationContext.getBean(type);
+		return this;
+		//return applicationContext.getBean(type);
 	}
 	
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -143,17 +146,14 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 		AbstractView view = applicationContext.getBean(newView);
 		return (T)view;
 	}
-	
-	public Object getControler() {
-		initializeFXMLLoader();
-		return controler;
-	}
-
+	 
 	private void initializeFXMLLoader() {
 		if (fxmlLoader == null) {
 			fxmlLoader = loadFXML(fxmlFilePath, bundle);
-			controler = fxmlLoader.getController();
+			//controler = fxmlLoader.getController();
 			parentView = fxmlLoader.getRoot();
+			
+			
 			addCSSIfAvailable(parentView);
 		}
 	}
