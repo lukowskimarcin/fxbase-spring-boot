@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
 import fxbase.AbstractView;
+import fxbase.ControlerCreateMode;
 import fxbase.FXMLView;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 
-@FXMLView("/fxml_test/Menu.fxml")
+@FXMLView(value="/fxml/Menu.fxml", bundle="fxml/menux")
 @Scope("prototype")
 public class MenuControler extends AbstractView {
 
@@ -43,7 +44,7 @@ public class MenuControler extends AbstractView {
 
 	@FXML
 	void onAbout(ActionEvent event) throws FileNotFoundException {
-		TestControler controler =  loadView(TestControler.class);
+		TestControler controler =  loadView(TestControler.class, ControlerCreateMode.SEPARATE );
 		main.getPane().setCenter(controler.getView());
 
 		TestControler controler2 =  loadView(TestControler.class);

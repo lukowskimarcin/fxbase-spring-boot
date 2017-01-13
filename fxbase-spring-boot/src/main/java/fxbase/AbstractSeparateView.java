@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 public class AbstractSeparateView extends AbstractView {
 	private Stage stage;
+	private Stage owner;
 	private Scene scene;
 	private Parent root;
 	
@@ -16,6 +17,7 @@ public class AbstractSeparateView extends AbstractView {
 	}
 	
 	public AbstractSeparateView initOwner(Stage owner) {
+		this.owner = owner;
 		getStage().initOwner(owner);
 		return this;
 	}
@@ -31,6 +33,15 @@ public class AbstractSeparateView extends AbstractView {
 		return this;
 	}
 	
+	public AbstractSeparateView center() {
+		if (owner != null) {
+			double centerXPosition = owner.getX() + owner.getWidth() / 2d;
+			double centerYPosition = owner.getY() + owner.getHeight() / 2d;
+			stage.setX(centerXPosition - stage.getWidth() / 2d);
+			stage.setY(centerYPosition - stage.getHeight() / 2d);
+		}
+		return this;
+	}
 	
 	public void show() {
 		getStage().setScene(getScene());

@@ -1,7 +1,6 @@
 package example;
 
 
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -12,7 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-@FXMLView("/fxml_test/Test.fxml")
+@FXMLView("/fxml/Test.fxml")
 @Scope("prototype")
 public class TestControler extends AbstractView {
 	

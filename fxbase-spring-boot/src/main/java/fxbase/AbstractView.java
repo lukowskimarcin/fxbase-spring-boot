@@ -3,6 +3,7 @@ package fxbase;
 import static java.util.ResourceBundle.getBundle;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -21,16 +22,19 @@ import javafx.scene.Parent;
 public abstract class AbstractView implements ApplicationContextAware, IFxmlLoader {
 	private static final String FXML_PATH = "/fxml/";
 	protected static final Logger log = Logger.getLogger(AbstractView.class.getName());   
+	protected static Locale locale;
 	
 	protected Parent parentView;
-	//protected Object controler;
-	
 	protected StringProperty title = new SimpleStringProperty();
 	protected URL fxmlFilePath;
 	protected FXMLLoader fxmlLoader;
 	protected ResourceBundle bundle;
+	
 	private ApplicationContext applicationContext;
 	private String fxmlRoot;
+	private Object controler;
+	
+	protected ControlerCreateMode mode = ControlerCreateMode.SELF;
 	
 	public AbstractView() {
 		this(FXML_PATH);
@@ -72,8 +76,11 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	}
 	
 	private Object createControllerForType(Class<?> type) {
-		return this;
-		//return applicationContext.getBean(type);
+		if(mode.equals(ControlerCreateMode.SELF)) {
+			return this;
+		} else {
+			return applicationContext.getBean(type);
+		}
 	}
 	
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -90,7 +97,9 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	
 	private ResourceBundle getResourceBundle(String name) {
 		try {
-			return getBundle(name);
+			Locale loc  = locale != null ? locale : Locale.getDefault();
+			ResourceBundle bundle = getBundle(name, loc);
+			return bundle;
 		} catch (MissingResourceException ex) {
 			return null;
 		}
@@ -128,11 +137,18 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	
 	public String getBundleName() {
         FXMLView annotation = getFXMLAnnotation();
+        String path = null;
         if (annotation != null && !annotation.bundle().equals("")) {
-           return annotation.bundle();
+        	path = annotation.bundle();
+        	path = path.replace("/", ".");
+        	path = path.replace("\\", ".");
+        	if(path.startsWith(".")) {
+        		path = path.substring(1);
+        	}
         } else {
-            return getClass().getPackage().getName() + "." + getConventionalName();
+        	path = this.getClass().getPackage().getName() + "." + getConventionalName();
         }
+        return path;
 	}
 	
 	public Parent getView() {
@@ -143,22 +159,25 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	@Override	
 	@SuppressWarnings("unchecked")
 	public <T> T loadView(Class<? extends AbstractView> newView) {
+		return loadView(newView, ControlerCreateMode.SELF);
+	}
+	
+	@Override	
+	@SuppressWarnings("unchecked")
+	public <T> T loadView(Class<? extends AbstractView> newView, ControlerCreateMode mode) {
 		AbstractView view = applicationContext.getBean(newView);
+		view.mode = mode;
 		return (T)view;
 	}
 	 
 	private void initializeFXMLLoader() {
 		if (fxmlLoader == null) {
 			fxmlLoader = loadFXML(fxmlFilePath, bundle);
-			//controler = fxmlLoader.getController();
 			parentView = fxmlLoader.getRoot();
-			
-			
+			controler = fxmlLoader.getController();
 			addCSSIfAvailable(parentView);
 		}
 	}
-	
-	
 	
 	public Node getViewWithoutRootContainer(){
 		ObservableList<Node> children = getView().getChildrenUnmodifiable();
@@ -168,8 +187,6 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 		return children.listIterator().next();
 	}
 	
-	
-	
 	public void setTitle(String title) {
 	    this.title.setValue(title);
 	}
@@ -177,5 +194,8 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	public StringProperty titleProperty() {
 	    return title;
 	}
-	
+
+	public static void setLocale(Locale locale) {
+		AbstractView.locale = locale;
+	}
 }

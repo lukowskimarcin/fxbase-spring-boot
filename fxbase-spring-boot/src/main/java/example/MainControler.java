@@ -14,7 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import service.Test;
 
-@FXMLView("/fxml_test/Main.fxml")
+@FXMLView("/fxml/Main.fxml")
 public class MainControler extends AbstractView  {
 
 	@Autowired

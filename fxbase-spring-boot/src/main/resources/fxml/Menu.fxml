@@ -7,23 +7,23 @@
 
 <MenuBar xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="example.MenuControler">
   <menus>
-    <Menu mnemonicParsing="false" text="Plik">
+    <Menu mnemonicParsing="false" text="%mFile">
       <items>
-            <MenuItem fx:id="mCompress" mnemonicParsing="false" onAction="#onCompress" text="Kompresuj">
+            <MenuItem fx:id="mCompress" mnemonicParsing="false" onAction="#onCompress" text="%mCompress">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                </accelerator></MenuItem>
-            <MenuItem fx:id="mDecompress" mnemonicParsing="false" onAction="#onDecompress" text="Rozpakuj">
+            <MenuItem fx:id="mDecompress" mnemonicParsing="false" onAction="#onDecompress" text="%mDecompress">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                </accelerator></MenuItem>
-        <MenuItem fx:id="mClose" mnemonicParsing="false" onAction="#closeAction" text="Zamknij">
+        <MenuItem fx:id="mClose" mnemonicParsing="false" onAction="#closeAction" text="%mClose">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                </accelerator></MenuItem>
       </items>
     </Menu>
-    <Menu mnemonicParsing="false" text="O programie">
+    <Menu mnemonicParsing="false" text="%mAbout">
       <items>
         <MenuItem fx:id="mAbout" mnemonicParsing="false" onAction="#onAbout" text="About" />
       </items>
