@@ -1,6 +1,8 @@
 package fxbase;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -19,6 +21,9 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	private static Class<? extends AbstractView> savedInitialView;
 
 	private static ConfigurableApplicationContext applicationContext;
+	
+	private static Locale locale;
+	private static List<String> defaultCSS;
 
 	private static Stage stage;
 	private static Scene scene; 
@@ -90,5 +95,27 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	
 	public Scene getScene() {
 		return scene;
+	}
+	
+	public static void setLocale(Locale locale) {
+		AbstractJavaFxApplication.locale = locale;
+	}
+	
+	public static Locale getLocale() {
+		if(locale==null) {
+			return Locale.getDefault();
+		}
+		return locale;
+	}
+	
+	public static void addDefaultCSS(String css) {
+		if(defaultCSS==null) {
+			defaultCSS = new ArrayList<String>();
+		}
+		defaultCSS.add(css);
+	}
+	
+	public static List<String> getDefaultCSS() {
+		return defaultCSS;
 	}
 }

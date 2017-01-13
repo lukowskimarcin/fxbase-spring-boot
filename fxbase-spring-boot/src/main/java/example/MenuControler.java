@@ -14,7 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 
-@FXMLView(value="/fxml/Menu.fxml", bundle=".fxml/menux")
+@FXMLView(value="/fxml/Menu.fxml", bundle="/bundle/menux")
 @Scope("prototype")
 public class MenuControler extends AbstractView {
 

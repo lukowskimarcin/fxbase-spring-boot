@@ -3,6 +3,7 @@ package fxbase;
 import static java.util.ResourceBundle.getBundle;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -22,7 +23,6 @@ import javafx.scene.Parent;
 public abstract class AbstractView implements ApplicationContextAware, IFxmlLoader {
 	private static final String FXML_PATH = "/fxml/";
 	protected static final Logger log = Logger.getLogger(AbstractView.class.getName());   
-	protected static Locale locale;
 	
 	protected Parent parentView;
 	protected StringProperty title = new SimpleStringProperty();
@@ -97,8 +97,7 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	
 	private ResourceBundle getResourceBundle(String name) {
 		try {
-			Locale loc  = locale != null ? locale : Locale.getDefault();
-			ResourceBundle bundle = getBundle(name, loc);
+			ResourceBundle bundle = getBundle(name, AbstractJavaFxApplication.getLocale());
 			return bundle;
 		} catch (MissingResourceException ex) {
 			return null;
@@ -113,16 +112,27 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 				String uriToCss = uri.toExternalForm();
 				parent.getStylesheets().add(uriToCss);
 			}
-			return;
+			
+		} else {
+			URL uri = getClass().getResource(getStyleSheetName());
+			if(uri!=null){
+				String uriToCss = uri.toExternalForm();
+				parent.getStylesheets().add(uriToCss);	
+			}
 		}
 		
-		URL uri = getClass().getResource(getStyleSheetName());
-		if (uri == null) {
-			return;
+		addGlobalCSSIfAvailable(parent);
+	}
+	
+	private void addGlobalCSSIfAvailable(Parent parent){
+		List<String> cssList = AbstractJavaFxApplication.getDefaultCSS();
+		if(cssList!=null){
+			for (String cssFile : cssList) {
+				URL uri = getClass().getResource(cssFile);
+				String uriToCss = uri.toExternalForm();
+				parent.getStylesheets().add(uriToCss);
+			}	
 		}
-
-		String uriToCss = uri.toExternalForm();
-		parent.getStylesheets().add(uriToCss);
 	}
 	
 	public String getStyleSheetName() {
@@ -195,7 +205,5 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	    return title;
 	}
 
-	public static void setLocale(Locale locale) {
-		AbstractView.locale = locale;
-	}
+	
 }
