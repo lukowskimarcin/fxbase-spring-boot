@@ -5,9 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@ComponentScan
-@Component
-//@Scope("prototype")
+@Service
 public class Test {
 	private static int count = 0;
 	
