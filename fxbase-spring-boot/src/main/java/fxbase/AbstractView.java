@@ -4,7 +4,6 @@ import static java.util.ResourceBundle.getBundle;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -57,7 +56,7 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	
 	public void reload(){
 		fxmlLoader = null;
-		//controler = null;
+		controler = null;
 	}
 	
 	
@@ -65,7 +64,6 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 		FXMLLoader loader = null;
 		try {
 			loader = new FXMLLoader(resource, bundle);
-			//loader.setController(this);
 			loader.setControllerFactory(this::createControllerForType);
 			loader.load();
 			
@@ -88,7 +86,6 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 			this.applicationContext = applicationContext;
 		}
 	}
-	
 	
 	private String getConventionalName() {
 		String name = getClass().getSimpleName().toLowerCase();
@@ -167,7 +164,6 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	}
 	
 	@Override	
-	@SuppressWarnings("unchecked")
 	public <T> T loadView(Class<? extends AbstractView> newView) {
 		return loadView(newView, ControlerCreateMode.SELF);
 	}
@@ -205,5 +201,7 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 	    return title;
 	}
 
-	
+	public Object getControler() {
+		return controler;
+	}	
 }

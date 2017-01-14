@@ -1,11 +1,9 @@
 package fxbase;
 
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 
 public class AbstractSeparateView extends AbstractView {
