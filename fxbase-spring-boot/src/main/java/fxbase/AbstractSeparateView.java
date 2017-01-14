@@ -1,9 +1,11 @@
 package fxbase;
 
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 public class AbstractSeparateView extends AbstractView {
@@ -35,10 +37,16 @@ public class AbstractSeparateView extends AbstractView {
 	
 	public AbstractSeparateView center() {
 		if (owner != null) {
-			double centerXPosition = owner.getX() + owner.getWidth() / 2d;
-			double centerYPosition = owner.getY() + owner.getHeight() / 2d;
-			stage.setX(centerXPosition - stage.getWidth() / 2d);
-			stage.setY(centerYPosition - stage.getHeight() / 2d);
+			stage.setOnShown( e -> {
+				double centerXPosition = owner.getX() + owner.getWidth() / 2d;
+				double centerYPosition = owner.getY() + owner.getHeight() / 2d;
+				
+				double childXPosition = centerXPosition - stage.getWidth() / 2d;
+				double childYPosition = centerYPosition - stage.getHeight() / 2d;
+				
+				stage.setX(childXPosition);
+				stage.setY(childYPosition);
+			});
 		}
 		return this;
 	}
