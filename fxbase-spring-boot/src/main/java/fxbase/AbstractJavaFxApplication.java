@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javafx.application.Application;
+import javafx.application.Preloader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -37,7 +38,6 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	@Override
 	public void start(Stage stage) throws Exception {
 		AbstractJavaFxApplication.stage = stage;
-		
 		showScene(savedInitialView);
 		
 		stage.setScene(scene);
@@ -86,6 +86,7 @@ public abstract class AbstractJavaFxApplication extends Application  {
 		savedInitialView = view;
 		savedArgs = args;
 		Application.launch(appClass, args);
+		
 	}
 	
 	
