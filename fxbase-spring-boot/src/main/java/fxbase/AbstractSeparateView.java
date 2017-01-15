@@ -2,6 +2,7 @@ package fxbase;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -11,10 +12,6 @@ public class AbstractSeparateView extends AbstractView {
 	private Stage owner;
 	private Scene scene;
 	private Parent root;
-	
-	public AbstractSeparateView(){
-		 
-	}
 	
 	public AbstractSeparateView initOwner(Stage owner) {
 		this.owner = owner;
@@ -77,6 +74,10 @@ public class AbstractSeparateView extends AbstractView {
 	public Stage getStage() {
 		if(stage==null) {
 			stage = new Stage();
+			Image icon = AbstractJavaFxApplication.getDefaultIcon();
+			if(icon!=null){
+				stage.getIcons().add(icon);	
+			}
 		}
 		return stage;
 	}

@@ -55,7 +55,7 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	
 	protected abstract List<Image> loadIcons();
 	
-	public Image getDefaultIcon(){
+	public static Image getDefaultIcon(){
 		Image icon = null;
 		if(stage!=null && stage.getIcons().size()>0) {
 			icon = stage.getIcons().get(0);
