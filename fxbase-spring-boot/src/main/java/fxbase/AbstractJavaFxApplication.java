@@ -1,14 +1,11 @@
 package fxbase;
 
 import java.awt.AWTException;
-import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -17,20 +14,19 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.logging.Log;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import com.sun.javafx.image.impl.ByteIndexed.Getter;
-
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.application.Preloader;
-import javafx.event.EventHandler;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.NumberBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import utils.DialogsUtil;
 
 
@@ -51,9 +47,9 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	private static Scene scene; 
 	
 	private static TrayIcon trayIcon;
+	private static SystemTray tray;
 	
-	private static InputStream icon;
-	 
+	private Rectangle windowPosition = new Rectangle(0, 0);  
 
 	@Override
 	public void init() throws Exception {
@@ -65,9 +61,8 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	public void start(Stage stage) throws Exception {
 		AbstractJavaFxApplication.stage = stage;
 		
-		javax.swing.SwingUtilities.invokeLater(this::createTrayIcon);
-		
-		showScene(savedInitialView);
+		AbstractView view = showScene(savedInitialView);
+		createTrayIcon(view.titleProperty().get());
 		
 		stage.setScene(scene);
 		stage.setResizable(true);
@@ -79,7 +74,9 @@ public abstract class AbstractJavaFxApplication extends Application  {
 			DialogsUtil.defaultIcon(icons.get(0));
 		}
 	 
-		stage.show();
+		if(trayIcon == null) {
+			stage.show();
+		}
 	}
 	
 	protected InputStream getTrayIcon() {
@@ -91,105 +88,107 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	}
 	
 	
-	protected void createTrayIcon(){
+	protected void createTrayIcon(String tooltip) {
 		InputStream icon = getTrayIcon();
-		
 		java.awt.Toolkit.getDefaultToolkit();
-		
-		boolean sup  = java.awt.SystemTray.isSupported();
-		
+
 		if (java.awt.SystemTray.isSupported() && icon != null) {
 			PopupMenu popup = createTrayMenu();
-			
-			 Platform.setImplicitExit(false);
-			 SystemTray tray = SystemTray.getSystemTray();
-			 
-			 java.awt.Image image = null;
-			 try {
-				 
-				 
-				 
-				 image = ImageIO.read(icon);
-				// image = ImageIO.read(new URL("http://icons.iconarchive.com/icons/scafer31000/bubble-circle-3/16/GameCenter-icon.png"));
+
+			Platform.setImplicitExit(false);
+			tray = SystemTray.getSystemTray();
+
+			java.awt.Image image = null;
+			try {
+				image = ImageIO.read(icon);
 			} catch (IOException ex) {
 				log.log(Level.SEVERE, "initTray load icon", ex);
 			}
-			 
-			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			
+			
+			stage.xProperty().addListener(new ChangeListener<Number>() {
 				@Override
-				public void handle(WindowEvent t) {
-					hide(stage);
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					double x = newValue.doubleValue();
+					if(x != -32000) {
+						windowPosition.setX(x);
+					}
 				}
 			});
 			
-			final ActionListener closeListener = new ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.exit(0);
-                }
-            };
-            
-            ActionListener showListener = new ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            stage.show();
-                        }
-                    });
-                }
-            };
-            
-
-            MenuItem showItem = new MenuItem("Show");
-            showItem.addActionListener(showListener);
-            popup.add(showItem);
-
-            MenuItem closeItem = new MenuItem("Close");
-            closeItem.addActionListener(closeListener);
-            popup.add(closeItem);
-            /// ... add other items
-            // construct a TrayIcon
-            trayIcon = new TrayIcon(image, "Title", popup);
-            
-            trayIcon.setImageAutoSize(true);
-            
-            // set the TrayIcon properties
-            trayIcon.addActionListener(showListener);
-            // ...
-            // add the tray image
-            try {
-                tray.add(trayIcon);
-            } catch (AWTException ex) {
-            	log.log(Level.SEVERE, "createTrayIcon", ex);
-                System.err.println(ex);
-            }
+			stage.yProperty().addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					double y = newValue.doubleValue();
+					if(y != -32000) {
+						windowPosition.setY(y);	
+					}
+				}
+			});
 			
-		}  
+
+			trayIcon = new TrayIcon(image, tooltip, popup);
+			trayIcon.setImageAutoSize(true);
+			trayIcon.addActionListener(event -> Platform.runLater(() -> {
+				if (stage != null && !stage.isShowing()) {
+
+					stage.setIconified(false);
+					if(windowPosition.getWidth() != 0 ) {
+						stage.setX(windowPosition.getX());
+						stage.setY(windowPosition.getY());
+						stage.setWidth(windowPosition.getWidth());
+						stage.setHeight(windowPosition.getHeight());	
+					}
+				    stage.show();
+					stage.toFront();
+					
+				} else {
+					hideAndSavePosition();
+				}
+			}));
+
+			try {
+				tray.add(trayIcon);
+			} catch (AWTException ex) {
+				log.log(Level.SEVERE, "createTrayIcon", ex);
+				ex.printStackTrace();
+			}
+			
+			
+			stage.iconifiedProperty().addListener(new ChangeListener<Boolean>() {
+				@Override
+				public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+					if(newValue) {
+						hideAndSavePosition();
+					}
+				}
+			});
+			
+			stage.setOnCloseRequest( event -> {
+				closeApplication();
+			});
+
+		}
 	}
 	
-	private static void hide(final Stage stage) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (SystemTray.isSupported()) {
-                    stage.hide();
-                } else {
-                    System.exit(0);
-                }
-            }
-        });
-    }
+	private void hideAndSavePosition() {
+		windowPosition.setWidth(stage.getWidth());
+		windowPosition.setHeight(stage.getHeight());
+		stage.hide();
+	}
+	
+	public void closeApplication() {
+		if(tray != null) {
+			tray.remove(trayIcon);
+		}
+		Platform.exit();
+	}
 	
 	protected static void launchApp(Class<? extends AbstractJavaFxApplication> appClass, Class<? extends AbstractView> view, String[] args) {
 		System.setProperty("java.awt.headless", System.getProperty("java.awt.headless", Boolean.toString(false)));
-		
 		savedInitialView = view;
 		savedArgs = args;
 		Application.launch(appClass, args);
-		
-		
 	}
 	
 	protected  List<Image> loadIcons() {
@@ -203,9 +202,8 @@ public abstract class AbstractJavaFxApplication extends Application  {
 		}
 		return icon;
 	}
-	 
 
-	public void showScene(Class<? extends AbstractView> newView) {
+	public AbstractView showScene(Class<? extends AbstractView> newView) {
 		AbstractView view = applicationContext.getBean(newView);
 		stage.titleProperty().bind(view.titleProperty());
 		
@@ -215,6 +213,8 @@ public abstract class AbstractJavaFxApplication extends Application  {
 		else {  
 			AbstractJavaFxApplication.scene.setRoot(view.getView());
 		}
+		
+		return view;
 	}
 
 	@Override

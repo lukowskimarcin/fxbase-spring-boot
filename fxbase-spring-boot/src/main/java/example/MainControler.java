@@ -41,6 +41,9 @@ public class MainControler extends AbstractView  {
 	@PostConstruct
 	public void init() {
 		System.out.println("@PostConstruct MainControler ");
+		
+		setTitle("Example");
+		
 		BorderPane borderPane = (BorderPane)getView();
 		borderPane.setTop(menu.getView());
 		borderPane.setBottom(menu2.getView());

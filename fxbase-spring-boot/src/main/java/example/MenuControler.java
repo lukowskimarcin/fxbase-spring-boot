@@ -39,7 +39,7 @@ public class MenuControler extends AbstractView {
 	
 	@FXML
 	void closeAction(ActionEvent event) {
-		Platform.exit();
+		starter.closeApplication();
 	}
 
 	@FXML
