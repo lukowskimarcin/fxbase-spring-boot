@@ -17,6 +17,7 @@ public class Starter extends AbstractJavaFxApplication {
 	public static void main(String[] args) {
 		addDefaultCSS("/css/main.css");
 		launchApp(Starter.class, MainControler.class, args);
+		
 	}
 
 	@Override
