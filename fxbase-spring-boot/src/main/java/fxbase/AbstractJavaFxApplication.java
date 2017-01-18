@@ -48,6 +48,7 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	
 	private static TrayIcon trayIcon;
 	private static SystemTray tray;
+	private static boolean startInTray = true;
 	
 	private Rectangle windowPosition = new Rectangle(0, 0);  
 
@@ -74,7 +75,7 @@ public abstract class AbstractJavaFxApplication extends Application  {
 			DialogsUtil.defaultIcon(icons.get(0));
 		}
 	 
-		if(trayIcon == null) {
+		if(trayIcon == null || !startInTray) {
 			stage.show();
 		}
 	}
@@ -251,5 +252,13 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	
 	public static List<String> getDefaultCSS() {
 		return defaultCSS;
+	}
+	
+	public static void setStartInTray(boolean startInTray) {
+		AbstractJavaFxApplication.startInTray = startInTray;
+	}
+	
+	public static boolean isStartInTray() {
+		return startInTray;
 	}
 }
