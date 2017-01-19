@@ -17,8 +17,11 @@ import javax.imageio.ImageIO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import com.sun.javafx.application.LauncherImpl;
+
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.application.Preloader;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.value.ChangeListener;
@@ -49,6 +52,8 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	private static TrayIcon trayIcon;
 	private static SystemTray tray;
 	private static boolean startInTray = true;
+
+	private static Image defaultIcon;
 	
 	private Rectangle windowPosition = new Rectangle(0, 0);  
 
@@ -68,11 +73,11 @@ public abstract class AbstractJavaFxApplication extends Application  {
 		stage.setScene(scene);
 		stage.setResizable(true);
 		stage.centerOnScreen();
-		
-		List<Image> icons = loadIcons();
-		if(icons!=null && !icons.isEmpty()){
-			stage.getIcons().addAll(loadIcons());	
-			DialogsUtil.defaultIcon(icons.get(0));
+	 
+		Image icon = getDefaultIcon();
+		if(icon  !=null  ){
+			stage.getIcons().add(icon);	
+			DialogsUtil.defaultIcon(icon);
 		}
 	 
 		if(trayIcon == null || !startInTray) {
@@ -192,16 +197,21 @@ public abstract class AbstractJavaFxApplication extends Application  {
 		Application.launch(appClass, args);
 	}
 	
-	protected  List<Image> loadIcons() {
-		return null;
+	
+	@SuppressWarnings("restriction")
+	protected static void launchApp(Class<? extends AbstractJavaFxApplication> appClass, Class<? extends AbstractView> view, Class<? extends Preloader> preloader, String[] args) {
+		System.setProperty("java.awt.headless", System.getProperty("java.awt.headless", Boolean.toString(false)));
+		savedInitialView = view;
+		savedArgs = args;
+		LauncherImpl.launchApplication(appClass, preloader, args);
 	}
 	
 	public static Image getDefaultIcon(){
-		Image icon = null;
-		if(stage!=null && stage.getIcons().size()>0) {
-			icon = stage.getIcons().get(0);
-		}
-		return icon;
+		return AbstractJavaFxApplication.defaultIcon;
+	}
+	
+	public static void setDefaultIcon(Image defaultIcon) {
+		AbstractJavaFxApplication.defaultIcon = defaultIcon;
 	}
 
 	public AbstractView showScene(Class<? extends AbstractView> newView) {

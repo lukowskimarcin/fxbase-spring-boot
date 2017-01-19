@@ -5,14 +5,19 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Lazy;
 
+import com.sun.javafx.application.LauncherImpl;
 
 import fxbase.AbstractJavaFxApplication;
+import fxbase.AbstractPreloaderView;
 import javafx.scene.image.Image;
+
+import javafx.application.Preloader;
 
 @Lazy
 @ComponentScan(basePackages= {"example", "service"})
@@ -21,10 +26,34 @@ public class Starter extends AbstractJavaFxApplication {
 	
 	public static void main(String[] args) {
 		addDefaultCSS("/css/main.css");
-		
+		loadIcon();
 		setStartInTray(false);
 		
-		launchApp(Starter.class, MainControler.class, args);
+		//launchApp(Starter.class, MainControler.class, args);
+		launchApp(Starter.class, MainControler.class, AbstractPreloaderView.class, args);
+	}
+	
+	@SuppressWarnings("restriction")
+	@Override
+    public void init() throws Exception {
+		super.init();
+		
+		double COUNT_LIMIT = 100000;
+        // Perform some heavy lifting (i.e. database start, check for application updates, etc. )
+        for (int i = 0; i < COUNT_LIMIT; i++) {
+            double progress =  i / COUNT_LIMIT;
+            LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(progress));
+        }
+    }
+	
+	private static void loadIcon() {
+		try {
+			InputStream img = new FileInputStream("src/main/resources/images/zip.png");
+			Image icon = new Image(img);
+			setDefaultIcon(icon);
+		} catch (Exception ex) {
+			log.log(Level.SEVERE, ex.getMessage(), ex);
+		}
 	}
 	
 	
@@ -38,14 +67,7 @@ public class Starter extends AbstractJavaFxApplication {
 		}
 		return is;
 	}
-
-	@Override
-	protected List<Image> loadIcons() {
-		Image image = new Image(getTrayIcon());
-		List<Image> list = new ArrayList<Image>();
-		list.add(image);
-		return list;
-	}
-	 
+	
+	
 	
 }
