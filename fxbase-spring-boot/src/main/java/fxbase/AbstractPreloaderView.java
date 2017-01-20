@@ -1,12 +1,10 @@
 package fxbase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javafx.application.Platform;
 import javafx.application.Preloader;
 import javafx.application.Preloader.StateChangeNotification.Type;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
@@ -20,27 +18,26 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 @Component
-public    class AbstractPreloaderView extends Preloader {
+public abstract class AbstractPreloaderView extends Preloader {
 	protected Stage preloaderStage;
 	protected double width = 600;
 	protected double height = 400;
 	
 	protected ProgressBar loadProgress;
 	
-	
 	/**
 	 * Splash screen background
 	 * @return
 	 */
-	public   Image getBackground() {
-		return new Image("http://fxexperience.com/wp-content/uploads/2010/06/logo.png");
-	}
+	public abstract Image getBackground();
 	
 	public String getTitle(){
 		return null;
 	}
 	
-	
+	public boolean isContinousProgress(){
+		return true;
+	}
 	
 	public Parent getView() {
 		Image background = getBackground();
@@ -84,13 +81,12 @@ public    class AbstractPreloaderView extends Preloader {
 	
 	@Override
     public void handleApplicationNotification(PreloaderNotification info) {
-        if (info instanceof ProgressNotification) {
+        if (info instanceof ProgressNotification && !isContinousProgress()) {
         	Platform.runLater(()-> {
         		loadProgress.setProgress(((ProgressNotification) info).getProgress());
         	});
         }
     }
-	
 
 	@Override
 	public void handleStateChangeNotification(StateChangeNotification stateChangeNotification) {

@@ -3,6 +3,7 @@ package example;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,7 +31,7 @@ public class Starter extends AbstractJavaFxApplication {
 		setStartInTray(false);
 		
 		//launchApp(Starter.class, MainControler.class, args);
-		launchApp(Starter.class, MainControler.class, AbstractPreloaderView.class, args);
+		launchApp(Starter.class, MainControler.class, AppPreloader.class, args);
 	}
 	
 	@SuppressWarnings("restriction")
@@ -38,7 +39,7 @@ public class Starter extends AbstractJavaFxApplication {
     public void init() throws Exception {
 		super.init();
 		
-		double COUNT_LIMIT = 100000;
+		double COUNT_LIMIT = 10000;
         // Perform some heavy lifting (i.e. database start, check for application updates, etc. )
         for (int i = 0; i < COUNT_LIMIT; i++) {
             double progress =  i / COUNT_LIMIT;
@@ -48,7 +49,7 @@ public class Starter extends AbstractJavaFxApplication {
 	
 	private static void loadIcon() {
 		try {
-			InputStream img = new FileInputStream("src/main/resources/images/zip.png");
+			InputStream img = Starter.class.getClassLoader().getResourceAsStream("images/tray.png");
 			Image icon = new Image(img);
 			setDefaultIcon(icon);
 		} catch (Exception ex) {
