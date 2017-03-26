@@ -248,7 +248,7 @@ public abstract class AbstractJavaFxApplication extends Application  {
 	
 	public static Locale getLocale() {
 		if(locale==null) {
-			return Locale.getDefault();
+			locale = Locale.getDefault();
 		}
 		return locale;
 	}
