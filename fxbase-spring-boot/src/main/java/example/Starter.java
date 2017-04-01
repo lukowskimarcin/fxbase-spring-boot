@@ -28,7 +28,7 @@ public class Starter extends AbstractJavaFxApplication {
 	public static void main(String[] args) {
 		addDefaultCSS("/css/main.css");
 		loadIcon();
-		setStartInTray(false);
+		setStartInTray(true);
 		
 		//launchApp(Starter.class, MainControler.class, args);
 		launchApp(Starter.class, MainControler.class, AppPreloader.class, args);
