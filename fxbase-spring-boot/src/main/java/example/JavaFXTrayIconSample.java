@@ -149,8 +149,8 @@ public class JavaFXTrayIconSample extends Application {
                             );
                         }
                     },
-                    5_000,
-                    60_000
+                    5000,
+                    60000
             );
 
             // add the application tray icon to the system tray.

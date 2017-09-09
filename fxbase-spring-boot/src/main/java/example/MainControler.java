@@ -13,7 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import service.Test;
 
-@FXMLView(value="/fxml/Main.fxml")
+@FXMLView(fxml="/fxml/Main.fxml")
 public class MainControler extends AbstractView  {
 
 	@Autowired

@@ -1,10 +1,12 @@
 package fxbase;
 
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 public class AbstractSeparateView extends AbstractView {
@@ -78,6 +80,13 @@ public class AbstractSeparateView extends AbstractView {
 			if(icon!=null){
 				stage.getIcons().add(icon);	
 			}
+			
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+					stage = null;
+				}
+			});
 		}
 		return stage;
 	}

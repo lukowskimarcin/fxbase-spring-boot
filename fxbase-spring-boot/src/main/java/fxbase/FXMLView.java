@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FXMLView {
-	String value() default "";
+	String fxml() default "";
 	String[] css() default {}; 
 	String bundle() default "";
 }

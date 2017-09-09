@@ -26,7 +26,7 @@ import javafx.application.Preloader;
 public class Starter extends AbstractJavaFxApplication {
 	
 	public static void main(String[] args) {
-		addDefaultCSS("/css/main.css");
+		addDefaultCSS("/css/maixn.css");
 		loadIcon();
 		setStartInTray(true);
 		

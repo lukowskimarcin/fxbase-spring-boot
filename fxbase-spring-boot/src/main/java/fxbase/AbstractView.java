@@ -43,8 +43,8 @@ public abstract class AbstractView implements ApplicationContextAware, IFxmlLoad
 		this.fxmlRoot = fxmlRoot;
 		
 		FXMLView annotation = getFXMLAnnotation();
-		if(annotation!= null && !annotation.value().equals("")){
-			fxmlFilePath = getClass().getResource(annotation.value());
+		if(annotation!= null && !annotation.fxml().equals("")){
+			fxmlFilePath = getClass().getResource(annotation.fxml());
 		} else {
 			String fileName = fxmlRoot + "/" + getConventionalName() + ".fxml";
 			fxmlFilePath = getClass().getResource(fileName);

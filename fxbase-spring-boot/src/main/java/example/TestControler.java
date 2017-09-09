@@ -11,7 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-@FXMLView("/fxml/Test.fxml")
+@FXMLView(fxml="/fxml/Test.fxml")
 @Scope("prototype")
 public class TestControler extends AbstractView {
 	
