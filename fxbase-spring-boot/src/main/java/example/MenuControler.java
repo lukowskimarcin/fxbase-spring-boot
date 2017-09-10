@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
 import fxbase.AbstractView;
-import fxbase.ControlerCreateMode;
 import fxbase.FXMLView;
+import fxbase.enums.ControlerCreateMode;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

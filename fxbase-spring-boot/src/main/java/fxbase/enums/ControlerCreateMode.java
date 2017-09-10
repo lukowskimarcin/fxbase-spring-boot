@@ -1,4 +1,4 @@
-package fxbase;
+package fxbase.enums;
 
 public enum ControlerCreateMode {
 	/**
