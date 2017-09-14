@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Lazy;
 
@@ -22,7 +23,8 @@ import javafx.application.Preloader;
 
 @Lazy
 @ComponentScan(basePackages= {"example", "service"})
-@SpringApplicationConfiguration
+//@SpringApplicationConfiguration
+@SpringBootApplication
 public class Starter extends AbstractJavaFxApplication {
 	
 	public static void main(String[] args) {
