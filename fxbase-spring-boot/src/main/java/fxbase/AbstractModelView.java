@@ -90,6 +90,10 @@ public abstract class AbstractModelView<T extends Dto> extends AbstractView {
 		return dataCopy;
 	}
 	
+	public void cleanEditableData() {
+		dataCopy = null;
+	}
+	
 	public boolean isAddMode(){
 		return ModelBeanMode.ADD.equals(mode);
 	}
