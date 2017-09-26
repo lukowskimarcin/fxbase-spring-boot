@@ -1,6 +1,6 @@
 package fxbase.enums;
 
-public enum ModelBeanMode {
+public enum ViewMode {
 	/**
 	 * Data view mode
 	 */

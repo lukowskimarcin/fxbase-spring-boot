@@ -1,77 +1,96 @@
 package fxbase;
 
-import fxbase.enums.ModelBeanMode;
+import fxbase.enums.ViewMode;
 
 public abstract class AbstractModelView<T extends Dto> extends AbstractView {
 	private T data;
 	private T dataCopy;
-	private ModelBeanMode mode = ModelBeanMode.VIEW;
-	
-	public  void populate(T data){
-		this.data = data;
-	}
+	private ViewMode mode = ViewMode.VIEW;
+
 	
 	/**
 	 * Connect model properties with view fields
+	 * Connect will be performed for data, not dataCopy
 	 */
-	public abstract void bindToView(T model); 
+	public abstract void bindToView(); 
 	
 	/**
 	 * Unbind model from view
 	 */
-	public abstract void unBindToView(); 
+	public abstract void unBindToView();
+	
 	
 	@SuppressWarnings("unchecked")
 	protected T createDataCopy() throws CloneNotSupportedException{
-		return (T)clone();
+		return (T)data.clone();
 	}
 	
 	public void prepareToAdd() {
-		mode = ModelBeanMode.ADD;
+		mode = ViewMode.ADD;
+		dataCopy = null;	//nie ma do czego wracac przy anulowaniu
 	}
 	
-	public void prepareToEdit() {
-		mode = ModelBeanMode.EDIT;
+	public void prepareToEdit() throws Exception {
+		mode = ViewMode.EDIT;
+		dataCopy = getDataCopy();
 	}	
 	
-	protected T performInsert(T data) throws Exception {
-		return data;
+	
+	/**
+	 * Operacje zwiazane z zapisem nowego rekordu na bazie danych
+	 * @param data
+	 * @return
+	 * @throws Exception
+	 */
+	protected boolean performInsert(T data) throws Exception {
+		return true;
 	}
 	
-	protected T performUpdate(T data) throws Exception {
-		return data;
+	
+	/**
+	 * Operacje zwiazane z zapisem nowej wersji rekordu na bazie danych
+	 * @param data
+	 * @return
+	 * @throws Exception
+	 */
+	protected boolean performUpdate(T data) throws Exception {
+		return true;
 	}
 	
+	
+	/** Operacje zwiazane z usuwaniem danego rekordu na bazie danych
+	 * @param data
+	 * @return
+	 * @throws Exception
+	 */
 	protected boolean performRemove(T data) throws Exception {
 		return true;
 	}
 	
-	public boolean applay() throws Exception {
+	public boolean save() throws Exception {
 		boolean resultStatus = false;
-		T modifiedData = getEditableData();
-		T resultData = null;
 		
 		if(isAddMode()){
-			resultData = performInsert(modifiedData);
+			resultStatus = performInsert(data);
 		} else if(isEditMode()) {
-			resultData = performUpdate(modifiedData);
+			resultStatus = performUpdate(data);
 		} else {
 			assert(false);
 		}
 		
-		if(resultData != null) {
-			data = resultData;
+		if(resultStatus) {
 			dataCopy = null;
-			mode = ModelBeanMode.VIEW;
-			resultStatus = true;
+			mode = ViewMode.VIEW;
 		}
 		
 		return resultStatus;
 	}
 	
 	public void cancel(){
-		mode = ModelBeanMode.VIEW;
+		mode = ViewMode.VIEW;
+		unBindToView();
 		data = dataCopy;
+		bindToView();
 		dataCopy = null;
 	}
 	
@@ -83,26 +102,26 @@ public abstract class AbstractModelView<T extends Dto> extends AbstractView {
 		return data;
 	}
 	
-	public T getEditableData() throws Exception {
+	public void setData(T data) {
+		this.data = data;
+	}
+	
+	public T getDataCopy() throws Exception {
 		if(dataCopy==null) {
 			dataCopy = createDataCopy();
 		}
 		return dataCopy;
 	}
 	
-	public void cleanEditableData() {
-		dataCopy = null;
-	}
-	
 	public boolean isAddMode(){
-		return ModelBeanMode.ADD.equals(mode);
+		return ViewMode.ADD.equals(mode);
 	}
 	
 	public boolean isEditMode()	{
-		return ModelBeanMode.EDIT.equals(mode);
+		return ViewMode.EDIT.equals(mode);
 	}
 	
 	public boolean isViewMode()	{
-		return ModelBeanMode.VIEW.equals(mode);
+		return ViewMode.VIEW.equals(mode);
 	}
 }
